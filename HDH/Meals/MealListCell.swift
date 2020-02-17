@@ -12,8 +12,10 @@ class MealListCell: UITableViewCell {
     
     //Label for the title of the meal item
     @IBOutlet weak var titleLabel: UILabel!
-    //Label for the description/subtitle of the meal itme
+    //Label for the description/subtitle of the meal item
     @IBOutlet weak var subtitleLabel: UILabel!
+    //Image of the meal item
+    @IBOutlet weak var cellImage: UIImageView!
     //Array of filter names
     var mealFilter: [String]?
     //The MealItem object

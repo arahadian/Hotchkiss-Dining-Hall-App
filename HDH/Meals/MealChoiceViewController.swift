@@ -88,22 +88,26 @@ class MealChoiceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        print("")
+        var mealIdentification = self.mealItem?.myID
+        print("Meal ID: \(mealIdentification)")
+        print("")
         
-        FoodImage.image = pic
+        FoodImage.image = UIImage(named: "defaultImage")
         nameLabel.text = name
         descriptionLabel.text = descript
         
         ratingSetup()
         
         filterSetup()
-    
+        
         for num in 0...labelCollection.count-1 {
             labelCollection[num].addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            //print(labelCollection[num].currentTitle)
         }
         
         //loadDataFromTable()
-        print(day)
+        print("Day: \(day)")
         updateMealTime()
     }
     
@@ -112,7 +116,7 @@ class MealChoiceViewController: UIViewController {
         
         let preferences = UserDefaults.standard
         let tempDay = preferences.integer(forKey: "day")
-        print(tempDay, "***", day)
+        print("Old Day: \(tempDay), Current Day: \(day)")
         if tempDay != day {
             preferences.set(day, forKey: "day")
             preferences.removeObject(forKey: "dict1")
@@ -125,29 +129,35 @@ class MealChoiceViewController: UIViewController {
         if sender.currentTitle == "DF"{
             logoType = "DF"
             logoHeader = FilterItem.category["DF"]!
+            logoDescription = "NO dairy"
         }else if sender.currentTitle == "GF"{
             logoType = "GF"
             logoHeader = FilterItem.category["GF"]!
+            logoDescription = "Does not contain wheat/gluten"
         }else if sender.currentTitle == "FF"{
             logoType = "FF"
             logoHeader = FilterItem.category["FF"]!
+            logoDescription = "Vegetables and proteins from Hotchkiss Farm"
         }else if sender.currentTitle == "HS"{
             logoType = "HS"
             logoHeader = FilterItem.category["HS"]!
+            logoDescription = "House-smoked (Ham, bacon, etc.)"
         }else if sender.currentTitle == "L"{
             logoType = "L"
             logoHeader = FilterItem.category["L"]!
+            logoDescription = "Products sourced within 100 miles"
         }else if sender.currentTitle == "O"{
             logoType = "O"
             logoHeader = FilterItem.category["O"]!
+            logoDescription = "All beans, legumes, and most grains"
         }else if sender.currentTitle == "V"{
-           logoType = "V"
+            logoType = "V"
             logoHeader = FilterItem.category["V"]!
-            logoDescription = "Exclusion of meat or other select animal products from the diet."
+            logoDescription = "NO meat"
         }else if sender.currentTitle == "VG"{
             logoType = "VG"
             logoHeader = FilterItem.category["VG"]!
-            logoDescription = "Using or containing no animal products."
+            logoDescription = "NO meat, dairy, eggs, or honey"
         }
         
         popOverSetup()
@@ -167,10 +177,12 @@ class MealChoiceViewController: UIViewController {
 
     //sets up the rating system
     func ratingSetup(){
+        
         ratings = getRating()
         
         if let value = ratings[mealItem!.myID]{
             if let unwrappedValue = value{
+                print("Val: \(unwrappedValue)")
                 submitButton.isEnabled = false
                 for number in 1...Int(unwrappedValue){
                     updateRatingImage(num: number-1)
@@ -238,7 +250,6 @@ class MealChoiceViewController: UIViewController {
             mealItem?.updateRating(newRating: rating)
             saveRating()
             saveDataToTable()
-            //print(ratings)
         }
     }
     
@@ -253,9 +264,17 @@ class MealChoiceViewController: UIViewController {
     //return returns the locally saved dictionary if it exists
     func getRating() -> [Int: Double?] {
         let preferences = UserDefaults.standard
+        
+        print("")
+        print("Ratings: \(ratings)")
+        print("")
+        
         if preferences.object(forKey: "dict1") != nil{
             let decoded = preferences.object(forKey: "dict1") as! Data
             let decodedDict = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [Int: Double?]
+            
+            print("Decoded: \(decodedDict)")
+            
             return decodedDict
         } else {
             var temp: [Int: Double?] = [:]

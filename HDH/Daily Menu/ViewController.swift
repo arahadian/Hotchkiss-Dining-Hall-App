@@ -87,8 +87,25 @@ class ViewController: UIViewController {
     //A single String that contains the entire dinner menu
     var myMealList3Final: String = ""
     
+    //Calendar object
+    let calendar = Calendar.current
+    
+    //Date object
+    var clock = Date()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let hour = calendar.component(.hour, from: clock)
+        //let minutes =calendar.component(.minute, from: clock)
+        
+        if hour >= 0 && hour <= 9{
+            scSegment.selectedSegmentIndex = 0
+        }else if hour >= 10 && hour <= 13{
+            scSegment.selectedSegmentIndex = 1
+        }else{
+            scSegment.selectedSegmentIndex = 2
+        }
         
         loadDailyMeal()
     }
@@ -260,13 +277,15 @@ class ViewController: UIViewController {
                         self.myMealList1Details.append(temp)
                         
                         if isSunday == false{
-                            testMeals.append(MealItem(name: temp, descript: "Breakfast", filter: filTemp))
-                            MealsBfast.append(MealItem(name: temp, descript: "Breakfast", filter: filTemp))
+                            var MealOne = MealItem(name: temp, descript: "Breakfast", filter: filTemp)
+                            testMeals.append(MealOne)
+                            MealsBfast.append(MealOne)
                             
                         }
                         else{
-                            testMeals.append(MealItem(name: temp, descript: "Brunch", filter: filTemp))
-                            MealsBrunch.append(MealItem(name: temp, descript: "Brunch", filter: filTemp))
+                            var sundayMealOne = MealItem(name: temp, descript: "Brunch", filter: filTemp)
+                            testMeals.append(sundayMealOne)
+                            MealsBrunch.append(sundayMealOne)
                         }
                         
                         for filt in filTemp {
@@ -354,12 +373,14 @@ class ViewController: UIViewController {
                         self.myMealList2Details.append(temp)
                         
                         if isSunday == false{
-                            testMeals.append(MealItem(name: temp, descript: "Lunch", filter: filTemp))
-                            MealsLunch.append(MealItem(name: temp, descript: "Lunch", filter: filTemp))
+                            var MealTwo = MealItem(name: temp, descript: "Lunch", filter: filTemp)
+                            testMeals.append(MealTwo)
+                            MealsLunch.append(MealTwo)
                         }
                         else{
-                            testMeals.append(MealItem(name: temp, descript: "Dinner", filter: filTemp))
-                            MealsDinner.append(MealItem(name: temp, descript: "Dinner", filter: filTemp))
+                            var sundayMealTwo = MealItem(name: temp, descript: "Dinner", filter: filTemp)
+                            testMeals.append(sundayMealTwo)
+                            MealsDinner.append(sundayMealTwo)
                         }
                         
                         for filt in filTemp {
@@ -445,8 +466,10 @@ class ViewController: UIViewController {
                             
                             self.myMealList3Details.append(temp)
                             
-                            testMeals.append(MealItem(name: temp, descript: "Dinner", filter: filTemp))
-                            MealsDinner.append(MealItem(name: temp, descript: "Dinner", filter: filTemp))
+                            var MealThree = MealItem(name: temp, descript: "Dinner", filter: filTemp)
+                            
+                            testMeals.append(MealThree)
+                            MealsDinner.append(MealThree)
                             
                             
                             for filt in filTemp {
@@ -499,10 +522,40 @@ class ViewController: UIViewController {
                     }
                     
                     DispatchQueue.main.async {
-                        self.lblDate.text = self.myMealDay[0].detail
-                        self.lblTitle.text = self.myMealTitle[0].detail
-                        self.lblTime.text = self.myMealTime[0].detail
-                        self.txtBody.text = self.myMealList1Final
+                        if isSunday == false{
+                            self.lblDate.text = self.myMealDay[self.scSegment.selectedSegmentIndex].detail
+                            self.lblTitle.text = self.myMealTitle[self.scSegment.selectedSegmentIndex].detail
+                            self.lblTime.text = self.myMealTime[self.scSegment.selectedSegmentIndex].detail
+                            
+                            if self.scSegment.selectedSegmentIndex == 0{
+                                self.txtBody.text = self.myMealList1Final
+                            }
+                            if self.scSegment.selectedSegmentIndex == 1{
+                                self.txtBody.text = self.myMealList2Final
+                            }
+                            if self.scSegment.selectedSegmentIndex == 2{
+                                self.txtBody.text = self.myMealList3Final
+                            }
+                        } else{
+                            if self.scSegment.selectedSegmentIndex == 0{
+                                self.lblDate.text = self.myMealDay[self.scSegment.selectedSegmentIndex].detail
+                                self.lblTitle.text = self.myMealTitle[self.scSegment.selectedSegmentIndex].detail
+                                self.lblTime.text = self.myMealTime[self.scSegment.selectedSegmentIndex].detail
+                                self.txtBody.text = self.myMealList1Final
+                            }
+                            if self.scSegment.selectedSegmentIndex == 1{
+                                self.lblDate.text = self.myMealDay[0].detail
+                                self.lblTitle.text = self.myMealTitle[0].detail
+                                self.lblTime.text = self.myMealTime[0].detail
+                                self.txtBody.text = self.myMealList1Final
+                            }
+                            if self.scSegment.selectedSegmentIndex == 2{
+                                self.lblDate.text = self.myMealDay[1].detail
+                                self.lblTitle.text = self.myMealTitle[1].detail
+                                self.lblTime.text = self.myMealTime[1].detail
+                                self.txtBody.text = self.myMealList2Final
+                            }
+                        }
                     }
                     
                 } catch Exception.Error(let type, let message) {
@@ -535,45 +588,48 @@ class ViewController: UIViewController {
     @IBAction func segmentedControl(_ sender: Any) {
         let controlIndex = scSegment.selectedSegmentIndex
         
-        if isSunday == false{
-            if controlIndex == 0{
-                print(self.myMealList1Details)
-                lblDate.text = myMealDay[0].detail
-                lblTitle.text = myMealTitle[0].detail
-                lblTime.text = myMealTime[0].detail
-                txtBody.text = myMealList1Final
+        if myMealDay.isEmpty == true {
+            
+        }else{
+            if isSunday == false{
+                if controlIndex == 0{
+                    lblDate.text = myMealDay[0].detail
+                    lblTitle.text = myMealTitle[0].detail
+                    lblTime.text = myMealTime[0].detail
+                    txtBody.text = myMealList1Final
+                }
+                else if controlIndex == 1{
+                    lblDate.text = myMealDay[1].detail
+                    lblTitle.text = myMealTitle[1].detail
+                    lblTime.text = myMealTime[1].detail
+                    txtBody.text = myMealList2Final
+                }
+                else if controlIndex == 2{
+                    lblDate.text = myMealDay[2].detail
+                    lblTitle.text = myMealTitle[2].detail
+                    lblTime.text = myMealTime[2].detail
+                    txtBody.text = myMealList3Final
+                }
             }
-            else if controlIndex == 1{
-                lblDate.text = myMealDay[1].detail
-                lblTitle.text = myMealTitle[1].detail
-                lblTime.text = myMealTime[1].detail
-                txtBody.text = myMealList2Final
-            }
-            else if controlIndex == 2{
-                lblDate.text = myMealDay[2].detail
-                lblTitle.text = myMealTitle[2].detail
-                lblTime.text = myMealTime[2].detail
-                txtBody.text = myMealList3Final
-            }
-        }
-        else{
-            if controlIndex == 0{
-                lblDate.text = myMealDay[0].detail
-                lblTitle.text = myMealTitle[0].detail
-                lblTime.text = myMealTime[0].detail
-                txtBody.text = myMealList1Final
-            }
-            else if controlIndex == 1{
-                lblDate.text = myMealDay[0].detail
-                lblTitle.text = myMealTitle[0].detail
-                lblTime.text = myMealTime[0].detail
-                txtBody.text = myMealList1Final
-            }
-            else if controlIndex == 2{
-                lblDate.text = myMealDay[1].detail
-                lblTitle.text = myMealTitle[1].detail
-                lblTime.text = myMealTime[1].detail
-                txtBody.text = myMealList2Final
+            else{
+                if controlIndex == 0{
+                    lblDate.text = myMealDay[0].detail
+                    lblTitle.text = myMealTitle[0].detail
+                    lblTime.text = myMealTime[0].detail
+                    txtBody.text = myMealList1Final
+                }
+                else if controlIndex == 1{
+                    lblDate.text = myMealDay[0].detail
+                    lblTitle.text = myMealTitle[0].detail
+                    lblTime.text = myMealTime[0].detail
+                    txtBody.text = myMealList1Final
+                }
+                else if controlIndex == 2{
+                    lblDate.text = myMealDay[1].detail
+                    lblTitle.text = myMealTitle[1].detail
+                    lblTime.text = myMealTime[1].detail
+                    txtBody.text = myMealList2Final
+                }
             }
         }
     }

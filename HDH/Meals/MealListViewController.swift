@@ -80,8 +80,7 @@ class MealListViewController: UIViewController, UITableViewDelegate, UITableView
             cell.mealFilter = food.filter
             cell.titleLabel?.text = food.name
             cell.subtitleLabel?.text = food.descript
-            //cell.cellImage?.image = UIImage(named: food.name!)
-            
+            cell.cellImage?.image = UIImage(named: "defaultImage")
             if food.name == "Menu is Unavailable"{
                 cell.isUserInteractionEnabled = false
             } else{

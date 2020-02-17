@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate  {
     let SERVER_URL = "https://api.backendless.com"
     let backendless = Backendless.sharedInstance()!
     var navigationController: UINavigationController?
+    var email = ""
    
     var window: UIWindow?
 
@@ -84,8 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate  {
             let familyName = user.profile.familyName
             let email = user.profile.email
             //let photo = user.profile.imageURL(withDimension: <#T##UInt#>)
-            if (email?.contains("hotchkiss.org"))!{
-                
+            if (email?.contains("mwebster@hotchkiss.org"))! || (email?.contains("mlu@hotchkiss.org"))!{
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let mainVC = ViewController()
                 let feedback = storyboard.instantiateViewController(withIdentifier: "Feedback") as! FeedbackViewController
@@ -108,6 +108,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate  {
         // Perform any operations when the user disconnects from app here.
         // ...
     }
+    
+    /*
+    func loadDataFromTable() {
+        let backendless = Backendless.sharedInstance()!
+        let readStore = backendless.data.of(Email.ofClass())
+        Types.tryblock({() -> Void in
+            let emailArr = readStore?.find() as! [Email]
+            print(emailArr)
+            
+        },
+                       catchblock: { (exception) -> Void in
+                        print("Server reported an error: \(String(describing: exception))")
+        })
+        print("Load done!")
+    }
+    */
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
